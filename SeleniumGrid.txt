@@ -40,6 +40,20 @@ How to implement Selenium Grid:
 	(Make sure you don't add more than 4 containers!)
 	- docker-compose scale chrome=2  | this will add another chrome browser
 	- docker-compose scale firefox=2 | this will add another firefox browser
+		- docker ps                      | check your current containers
+
+3) In your driver class add this case:
+	-			case "remote-chrome":
+                        //ChromeOptions options = new ChromeOptions();
+                        try {
+                            DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+                            desiredCapabilities.setBrowserName("chrome");
+                            URL gridUrl = new URL("http://Your-IP:4444/wd/hub");
+                            driverPool.set(new RemoteWebDriver(gridUrl, desiredCapabilities));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
 
 
 
