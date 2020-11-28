@@ -1,0 +1,45 @@
+Selenium Grid
+
+How to implement Selenium Grid:
+
+1. Create AWS Instance
+	- Choosing AMI: Amazon Linux 2 AMI (HVM), SSD Volume Type - ami-0947d2ba12ee1ff75 (64-bit x86) / ami-007a607c4abd192db (64-bit Arm)
+
+	- Free Tier Eligible
+
+	- Configure Instance: Add User Data: 
+		#!/bin/bash
+		sudo yum update -y &&
+		sudo amazon-linux-extras install -y docker &&
+		sudo service docker start &&
+		sudo usermod -a -G docker ec2-user &&
+		sudo chkconfig docker on &&
+		sudo yum install -y git &&
+		sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose &&
+		sudo chmod +x /usr/local/bin/docker-compose &&
+		docker-compose version &&
+		sudo curl -L https://cybertek-shared.s3.amazonaws.com/docker-compose.yml -o /home/ec2-user/docker-compose.yml &&
+		sudo reboot
+
+	- Add Storage, click next
+
+	- Add Tags,
+		add Name tag
+
+	- Configure Security Groups,
+		create new security group, choose name
+		add Rule: Type: Custom TCP
+				  Port Range: 4444
+				  Source: Anywhere
+				  Description: Name of port
+
+	- Create Key pair: Choose key pair and download it, then hit launch
+
+2) Connect to your instance in AWS
+	- docker-compose up -d | this will start docker container
+	(Make sure you don't add more than 4 containers!)
+	- docker-compose scale chrome=2  | this will add another chrome browser
+	- docker-compose scale firefox=2 | this will add another firefox browser
+
+
+
